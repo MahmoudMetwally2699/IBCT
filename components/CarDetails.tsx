@@ -59,7 +59,8 @@ const CarDetails = ({ isOpen, closeModal, ibct }: CarDetailsProps) => (
                     {ibct.acf.member_name} 
                   </h2>
 
-                  <div className='mt-3 flex flex-wrap gap-4'>
+    
+<div className='mt-3 flex flex-wrap gap-4'>
   {Object.entries(ibct.acf).filter(([key, value]) => (
     value !== "" && value !== "[testpost]" && key !== "secondary_image"&&key!=="send_second_cer"&&key!=="send_first_cer"&&key!=="certification_level"
   )).map(([key, value]) => (
@@ -69,7 +70,7 @@ const CarDetails = ({ isOpen, closeModal, ibct }: CarDetailsProps) => (
       </h4>
       <p className='text-black-100 font-semibold'>
         {value === '[testpost]' ? '' :
-         (key === 'certification_date' || key === 'first_certification_date' || key === 'expiration_date'|| key === 'birth_date') ? 
+         (key === 'certification_date' || key === 'first_certification_date' || key === 'expiration_date' || key === 'birth_date') && value ? 
          new Date(
            parseInt(value.slice(0, 4)),
            parseInt(value.slice(4, 6)) - 1,
@@ -79,11 +80,12 @@ const CarDetails = ({ isOpen, closeModal, ibct }: CarDetailsProps) => (
            month: 'long',
            day: 'numeric'
          }) :
-         key === 'trainer_region' ? 'MENA' : value}
+         key === 'trainer_region' && value ? 'MENA' : value}
       </p>
     </div>
   ))}
 </div>
+
 
                 </div>
               </Dialog.Panel>
