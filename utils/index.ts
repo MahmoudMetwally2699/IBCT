@@ -1,19 +1,6 @@
-import { CarProps, FilterProps } from "@types";
 
-export const calculateCarRent = (city_mpg: number, year: number) => {
-  const basePricePerDay = 50; // Base rental price per day in dollars
-  const mileageFactor = 0.1; // Additional rate per mile driven
-  const ageFactor = 0.05; // Additional rate per year of vehicle age
+import {  FilterProps, FirstApiDataItem, SecondApiData,HomeProps2 } from "@types";
 
-  // Calculate additional rate based on mileage and ageإ
-  const mileageRate = city_mpg * mileageFactor;
-  const ageRate = (new Date().getFullYear() - year) * ageFactor;
-
-  // Calculate total rental rate per day
-  const rentalRatePerDay = basePricePerDay + mileageRate + ageRate;
-
-  return rentalRatePerDay.toFixed(0);
-};
 
 export const updateSearchParams = (type: string, value: string) => {
   // Get the current URL search params
@@ -41,40 +28,53 @@ export const deleteSearchParams = (type: string) => {
   return newPathname;
 };
 
-export async function fetchCars(filters: FilterProps) {
-  const { manufacturer, year, model, limit, fuel } = filters;
 
-  // Set the required headers for the API request
-  const headers: HeadersInit = {
-    "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-    "X-RapidAPI-Host": "cars-by-api-ninjas.p.rapidapi.com",
+
+
+interface ErrorResponse {
+  code: string;
+  message: string;
+  data: {
+    status: number;
   };
+}
+export async function IBCT(filters: FilterProps) {
+
+  const { per_page,search,level_of_certification } = filters;
+
 
   // Set the required headers for the API request
   const response = await fetch(
-    `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`,
-    {
-      headers: headers,
-    }
+    `https://test.ketodietnutrition.org/TestKeto/wp-json/wp/v2/ibct-trainers/?per_page=${per_page}&search=${search}&level_of_certification=${level_of_certification}`
   );
-
   // Parse the response as JSON
+
   const result = await response.json();
+
+  console.log(result)
 
   return result;
 }
 
-export const generateCarImageUrl = (car: CarProps, angle?: string) => {
-  const url = new URL("https://cdn.imagin.studio/getimage");
-  const { make, model, year } = car;
+// export async function IBCT(limit: number) {
+//     const response = await fetch(`https://test.ketodietnutrition.org/TestKeto/wp-json/wp/v2/ibct-trainers/?per_page=${limit}`);
+//     const data: FirstApiDataItem= await response.json();
+//   return data;
+// }
 
-  url.searchParams.append('customer', process.env.NEXT_PUBLIC_IMAGIN_API_KEY || '');
-  url.searchParams.append('make', make);
-  url.searchParams.append('modelFamily', model.split(" ")[0]);
-  url.searchParams.append('zoomType', 'fullscreen');
-  url.searchParams.append('modelYear', `${year}`);
-  // url.searchParams.append('zoomLevel', zoomLevel);
-  url.searchParams.append('angle', `${angle}`);
+// imageUtils.js
 
-  return `${url}`;
-} 
+export async function fetchImages(secondaryImages:string) {
+
+ 
+    const secondApiResponse = await fetch(
+      `http://test.ketodietnutrition.org/TestKeto/wp-json/wp/v2/media/${secondaryImages}`
+    );
+    const secondApiData = await secondApiResponse.json();  
+
+  return secondApiData.source_url ;
+}
+
+
+
+

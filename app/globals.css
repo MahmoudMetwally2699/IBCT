@@ -197,6 +197,8 @@
 
 .searchbar__input {
   @apply w-full h-[48px] pl-12 p-4 bg-light-white rounded-r-full max-sm:rounded-full outline-none cursor-pointer text-sm;
+  border-bottom-left-radius: 9999px;
+  border-top-left-radius: 9999px;
 }
 /* END: searchbar styles */
 

@@ -1,18 +1,26 @@
-import { fetchCars } from "@utils";
+import { IBCT } from "@utils";
 import { HomeProps } from "@types";
-import { fuels, yearsOfProduction } from "@constants";
-import { CarCard, ShowMore, SearchBar, CustomFilter, Hero } from "@components";
+import { trainers } from "@constants";
+import { CarCard, ShowMore, SearchBar, CustomFilter, Hero, CustomButton } from "@components";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+
 
 export default async function Home({ searchParams }: HomeProps) {
-  const allCars = await fetchCars({
-    manufacturer: searchParams.manufacturer || "",
-    year: searchParams.year || 2022,
-    fuel: searchParams.fuel || "",
-    limit: searchParams.limit || 10,
-    model: searchParams.model || "",
+
+  const Ibct = await IBCT({
+    per_page: searchParams.per_page || 5,
+    search:searchParams.search||"",
+    level_of_certification:searchParams.level_of_certification||'all',
+  
   });
 
-  const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
+
+
+  const isDataEmpty2 = !Array.isArray(Ibct) || Ibct.length < 1 || !Ibct;
+
+
 
   return (
     <main className='overflow-hidden'>
@@ -28,28 +36,28 @@ export default async function Home({ searchParams }: HomeProps) {
           <SearchBar />
 
           <div className='home__filter-container'>
-            <CustomFilter title='fuel' options={fuels} />
-            <CustomFilter title='year' options={yearsOfProduction} />
+            <CustomFilter title='level_of_certification' options={trainers} />
           </div>
         </div>
 
-        {!isDataEmpty ? (
+        {!isDataEmpty2 ? (
           <section>
             <div className='home__cars-wrapper'>
-              {allCars?.map((car) => (
-                <CarCard car={car} />
+              {Ibct?.map((Ibct) => (
+                <CarCard ibct={Ibct}  />
               ))}
             </div>
 
             <ShowMore
-              pageNumber={(searchParams.limit || 10) / 10}
-              isNext={(searchParams.limit || 10) > allCars.length}
+              pageNumber={(searchParams.per_page || 3) / 3}
+              isNext={(searchParams.per_page || 3) > Ibct.length}
             />
           </section>
         ) : (
           <div className='home__error-container'>
             <h2 className='text-black text-xl font-bold'>Oops, no results</h2>
-            <p>{allCars?.message}</p>
+            <p>{Ibct?.message}</p>
+
           </div>
         )}
       </div>

@@ -11,10 +11,10 @@ const ShowMore = ({ pageNumber, isNext }: ShowMoreProps) => {
 
   const handleNavigation = () => {
     // Calculate the new limit based on the page number and navigation type
-    const newLimit = (pageNumber + 1) * 10;
+    const per_page = (pageNumber + 1) * 3;
 
     // Update the "limit" search parameter in the URL with the new value
-    const newPathname = updateSearchParams("limit", `${newLimit}`);
+    const newPathname = updateSearchParams("per_page", `${per_page}`);
     
     router.push(newPathname,{scroll:false});
   };

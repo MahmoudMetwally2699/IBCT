@@ -2,16 +2,15 @@ import { Fragment } from "react";
 import Image from "next/image";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { CarProps } from "@types";
-import { generateCarImageUrl } from "@utils";
+import { FirstApiDataItem } from "@types";
 
 interface CarDetailsProps {
   isOpen: boolean;
   closeModal: () => void;
-  car: CarProps;
+  ibct: FirstApiDataItem;
 }
 
-const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => (
+const CarDetails = ({ isOpen, closeModal, ibct }: CarDetailsProps) => (
   <>
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={closeModal}>
@@ -53,41 +52,39 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => (
                   />
                 </button>
 
-                <div className='flex-1 flex flex-col gap-3'>
-                  <div className='relative w-full h-40 bg-pattern bg-cover bg-center rounded-lg'>
-                    <Image src={generateCarImageUrl(car)} alt='car model' fill priority className='object-contain' />
-                  </div>
-
-                  <div className='flex gap-3'>
-                    <div className='flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg'>
-                      <Image src={generateCarImageUrl(car, "29")} alt='car model' fill priority className='object-contain' />
-                    </div>
-                    <div className='flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg'>
-                      <Image src={generateCarImageUrl(car, "33")} alt='car model' fill priority className='object-contain' />
-                    </div>
-                    <div className='flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg'>
-                      <Image  src={generateCarImageUrl(car, "13")} alt='car model' fill priority className='object-contain' />
-                    </div>
-                  </div>
-                </div>
+              
 
                 <div className='flex-1 flex flex-col gap-2'>
                   <h2 className='font-semibold text-xl capitalize'>
-                    {car.make} {car.model}
+                    {ibct.acf.member_name} 
                   </h2>
 
                   <div className='mt-3 flex flex-wrap gap-4'>
-                    {Object.entries(car).map(([key, value]) => (
-                      <div className='flex justify-between gap-5 w-full text-right' key={key} >
-                        <h4 className='text-grey capitalize'>
-                          {key.split("_").join(" ")}
-                        </h4>
-                        <p className='text-black-100 font-semibold'>
-                          {value}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+  {Object.entries(ibct.acf).filter(([key, value]) => (
+    value !== "" && value !== "[testpost]" && key !== "secondary_image"&&key!=="send_second_cer"&&key!=="send_first_cer"&&key!=="certification_level"
+  )).map(([key, value]) => (
+    <div className='flex justify-between gap-5 w-full text-right' key={key}>
+      <h4 className='text-grey capitalize'>
+        {key.split("_").join(" ") === 'today' ? '' : key.split("_").join(" ")}
+      </h4>
+      <p className='text-black-100 font-semibold'>
+        {value === '[testpost]' ? '' :
+         (key === 'certification_date' || key === 'first_certification_date' || key === 'expiration_date'|| key === 'birth_date') ? 
+         new Date(
+           parseInt(value.slice(0, 4)),
+           parseInt(value.slice(4, 6)) - 1,
+           parseInt(value.slice(6, 8))
+         ).toLocaleDateString('en-US', {
+           year: 'numeric',
+           month: 'long',
+           day: 'numeric'
+         }) :
+         key === 'trainer_region' ? 'MENA' : value}
+      </p>
+    </div>
+  ))}
+</div>
+
                 </div>
               </Dialog.Panel>
             </Transition.Child>

@@ -1,23 +1,10 @@
-"use client";
+"use client"
 
 import Image from "next/image";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-
-import SearchManufacturer from "./SearchManufacturer";
 import RestButton from "./RestButton";
-
-const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
-  <button type='submit' className={`-ml-3 z-10 ${otherClasses}`}>
-    <Image
-      src={"/magnifying-glass.svg"}
-      alt={"magnifying glass"}
-      width={40}
-      height={40}
-      className='object-contain'
-    />
-  </button>
-);
+import { CustomButton } from "@components";
 
 const SearchBar = () => {
   const [manufacturer, setManuFacturer] = useState("");
@@ -25,56 +12,37 @@ const SearchBar = () => {
 
   const router = useRouter();
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSearch = () => {
+   
 
-    if (manufacturer.trim() === "" && model.trim() === "") {
-      return alert("Please provide some input");
-    }
-
-    updateSearchParams(model.toLowerCase(), manufacturer.toLowerCase());
+    updateSearchParams(model.toLowerCase());
   };
 
-  const updateSearchParams = (model: string, manufacturer: string) => {
-    // Create a new URLSearchParams object using the current URL search parameters
+  const updateSearchParams = (model: string) => {
     const searchParams = new URLSearchParams(window.location.search);
 
-    // Update or delete the 'model' search parameter based on the 'model' value
     if (model) {
-      searchParams.set("model", model);
+      searchParams.set("search", model);
     } else {
-      searchParams.delete("model");
+      searchParams.delete("search");
     }
 
-    // Update or delete the 'manufacturer' search parameter based on the 'manufacturer' value
-    if (manufacturer) {
-      searchParams.set("manufacturer", manufacturer);
-    } else {
-       searchParams.delete("manufacturer");
-    }
-
-    // Generate the new pathname with the updated search parameters
     const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
 
-    router.push(newPathname,{scroll:false});
+    router.push(newPathname, { scroll: false });
   };
+
   const resetInputs = () => {
     setManuFacturer("");
     setModel("");
   };
 
   return (
-    <form className='searchbar' onSubmit={handleSearch}>
-      <div className='searchbar__item'>
-        <SearchManufacturer
-          manufacturer={manufacturer}
-          setManuFacturer={setManuFacturer}
-        />
-        <SearchButton otherClasses='sm:hidden' />
-      </div>
+    <div className='searchbar'>
+    
       <div className='searchbar__item'>
         <Image
-          src='/model-icon.png'
+          src='http://test.ketodietnutrition.org/TestKeto/wp-content/uploads/2023/01/male-avatar-ibct-directory.png'
           width={25}
           height={25}
           className='absolute w-[20px] h-[20px] ml-4'
@@ -85,16 +53,14 @@ const SearchBar = () => {
           name='model'
           value={model}
           onChange={(e) => setModel(e.target.value)}
-          placeholder='Tiguan...'
+          placeholder='Search...'
           className='searchbar__input'
         />
-        <SearchButton otherClasses='sm:hidden' />
       </div>
-      <SearchButton otherClasses='max-sm:hidden' />
-      <RestButton   setManuFacturer={setManuFacturer}
-      setModel={setModel}  />
-
-    </form>
+      <CustomButton  handleClick={handleSearch} title={"Search"}/>
+        
+      <RestButton setManuFacturer={setManuFacturer} setModel={setModel} />
+    </div>
   );
 };
 
