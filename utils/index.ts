@@ -68,7 +68,7 @@ export async function fetchImages(secondaryImages:string) {
 
  
     const secondApiResponse = await fetch(
-      `http://test.ketodietnutrition.org/TestKeto/wp-json/wp/v2/media/${secondaryImages}`
+      `https://test.ketodietnutrition.org/TestKeto/wp-json/wp/v2/media/${secondaryImages}`
     );
     const secondApiData = await secondApiResponse.json();  
 
