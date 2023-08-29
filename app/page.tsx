@@ -1,3 +1,5 @@
+"use client"
+
 import { IBCT } from "@utils";
 import { HomeProps } from "@types";
 import { trainers } from "@constants";
