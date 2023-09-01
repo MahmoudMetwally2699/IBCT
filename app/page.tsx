@@ -1,11 +1,8 @@
-"use client"
-
 import { IBCT } from "@utils";
 import { HomeProps } from "@types";
 import { trainers } from "@constants";
 import { CarCard, ShowMore, SearchBar, CustomFilter, Hero, CustomButton } from "@components";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+
 
 
 
